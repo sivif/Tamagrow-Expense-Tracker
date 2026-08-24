@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>TamaGrow — Expense Ledger</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#F1EEE3;
+    --paper-line:#DAD4C0;
+    --ink:#2B2A22;
+    --ink-soft:#6B6A5D;
+    --soil:#8B5E3C;
+    --moss:#3C5943;
+    --moss-soft:#6B8F71;
+    --rust:#A64B36;
+    --card:#FBFAF5;
+    --radius:10px;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:var(--paper);
+    background-image:
+      linear-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size: 100% 2.1em;
+    color:var(--ink);
+    font-family:'IBM Plex Sans', sans-serif;
+    -webkit-font-smoothing:antialiased;
+  }
+  .wrap{max-width:920px;margin:0 auto;padding:2.5em 1.5em 5em;}
+
+  header.hero{margin-bottom:1.8em;}
+  .eyebrow{
+    font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
+    color:var(--soil); margin:0 0 .4em;
+  }
+  h1{
+    font-family:'Fraunces',serif; font-weight:600;
+    font-size:clamp(1.8rem,4vw,2.6rem);
+    margin:0 0 .2em; letter-spacing:-.01em;
+  }
+  .sub{color:var(--ink-soft); font-size:.95rem; margin:0;}
+
+  .summary{
+    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
+    gap:.9em; margin:1.8em 0 2.2em;
+  }
+  .person-card{
+    background:var(--card); border:1px solid var(--paper-line);
+    border-radius:var(--radius); padding:1.1em 1.2em;
+    position:relative; overflow:hidden;
+  }
+  .person-card .name{
+    font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem;
+  }
+  .person-card .row{
+    display:flex; justify-content:space-between; align-items:baseline;
+    font-family:'IBM Plex Mono',monospace; font-size:.82rem; color:var(--ink-soft);
+    margin-top:.5em;
+  }
+  .person-card .net{
+    font-family:'IBM Plex Mono',monospace; font-size:1.3rem; margin-top:.35em;
+  }
+  .net.positive{color:var(--moss);}
+  .net.negative{color:var(--rust);}
+  .status-pill{
+    display:inline-block; margin-top:.5em; font-family:'IBM Plex Mono',monospace;
+    font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;
+    padding:.25em .6em; border-radius:99px;
+  }
+  .status-pill.collect{background:#E4EEE3; color:var(--moss);}
+  .status-pill.payup{background:#F3E2DC; color:var(--rust);}
+
+  .panel{
+    background:var(--card); border:1px solid var(--paper-line);
+    border-radius:var(--radius); padding:1.4em 1.4em 1.6em; margin-bottom:1.6em;
+  }
+  .panel h2{
+    font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; margin:0 0 1em;
+  }
+  form.expense-form{display:grid; grid-template-columns:repeat(6,1fr); gap:.7em;}
+  form.expense-form .field{display:flex; flex-direction:column; gap:.3em;}
+  form.expense-form label{font-size:.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
+  form.expense-form input, form.expense-form select{
+    font-family:'IBM Plex Sans',sans-serif; font-size:.9rem;
+    padding:.5em .6em; border:1px solid var(--paper-line); border-radius:6px;
+    background:#fff; color:var(--ink);
+  }
+  .field.desc{grid-column:span 2;}
+  .field.date, .field.amount{grid-column:span 1;}
+  .field.actions{grid-column:span 6; display:flex; gap:.6em; margin-top:.2em;}
+  button{
+    font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.02em;
+    padding:.6em 1.1em; border-radius:6px; border:1px solid var(--moss);
+    background:var(--moss); color:#fff; cursor:pointer;
+  }
+  button.secondary{background:transparent; color:var(--ink-soft); border-color:var(--paper-line);}
+  button:disabled{opacity:.5; cursor:default;}
+
+  table{width:100%; border-collapse:collapse; font-size:.88rem;}
+  th{
+    text-align:left; font-family:'IBM Plex Mono',monospace; font-size:.7rem;
+    letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft);
+    padding:.5em .5em; border-bottom:1px solid var(--paper-line);
+  }
+  td{padding:.6em .5em; border-bottom:1px solid var(--paper-line); vertical-align:top;}
+  td.amount{font-family:'IBM Plex Mono',monospace; text-align:right;}
+  tr:hover td{background:#F8F6EE;}
+  .row-actions{display:flex; gap:.4em;}
+  .row-actions button{padding:.3em .6em; font-size:.72rem;}
+  .empty{color:var(--ink-soft); font-style:italic; padding:1.4em 0;}
+  .status-msg{font-family:'IBM Plex Mono',monospace; font-size:.8rem; margin-top:.8em; min-height:1.2em;}
+  .status-msg.error{color:var(--rust);}
+  .status-msg.ok{color:var(--moss);}
+
+  #apiSetup{display:none;}
+  #apiSetup.show{display:block;}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <p class="eyebrow">TamaGrow · shared budget</p>
+    <h1>Expense Ledger</h1>
+    <p class="sub">Live view of the Google Sheet, editable from here.</p>
+  </header>
+
+  <div id="apiSetup" class="panel">
+    <h2>One-time setup</h2>
+    <p style="font-size:.88rem;color:var(--ink-soft);margin-top:0;">
+      Paste your Apps Script Web App URL (ends in <code>/exec</code>) below.
+      It's saved in this browser only.
+    </p>
+    <div style="display:flex; gap:.6em;">
+      <input id="apiUrlInput" type="text" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1;padding:.6em;border:1px solid var(--paper-line);border-radius:6px;">
+      <button onclick="saveApiUrl()">Save</button>
+    </div>
+  </div>
+
+  <section class="summary" id="summaryCards"></section>
+
+  <section class="panel">
+    <h2 id="formTitle">Add an expense</h2>
+    <form class="expense-form" id="expenseForm" onsubmit="submitForm(event)">
+      <input type="hidden" id="rowId">
+      <div class="field date">
+        <label>Date</label>
+        <input type="date" id="fDate" required>
+      </div>
+      <div class="field desc">
+        <label>Description</label>
+        <input type="text" id="fDescription" required>
+      </div>
+      <div class="field amount">
+        <label>Amount</label>
+        <input type="number" step="0.01" id="fAmount" required>
+      </div>
+      <div class="field">
+        <label>Paid by</label>
+        <select id="fPaidBy" required></select>
+      </div>
+      <div class="field">
+        <label>Split mode</label>
+        <select id="fSplitMode" onchange="toggleSplitTarget()">
+          <option value="Equally">Equally</option>
+          <option value="Pay Person">Pay Person</option>
+        </select>
+      </div>
+      <div class="field" id="payToField" style="display:none;">
+        <label>Pay to</label>
+        <select id="fPayTo"></select>
+      </div>
+      <div class="field">
+        <label>Method</label>
+        <input type="text" id="fMethod" placeholder="Cash, GCash…">
+      </div>
+      <div class="field actions">
+        <button type="submit" id="submitBtn">Add expense</button>
+        <button type="button" class="secondary" id="cancelEditBtn" onclick="resetForm()" style="display:none;">Cancel edit</button>
+      </div>
+    </form>
+    <p class="status-msg" id="formStatus"></p>
+  </section>
+
+  <section class="panel">
+    <h2>Transactions</h2>
+    <div id="tableWrap"><p class="empty">Loading…</p></div>
+  </section>
+
+</div>
+
+<script>
+// ---- Configuration -------------------------------------------------
+// Paste your Apps Script /exec URL here, OR leave blank and the page
+// will ask for it once and remember it in localStorage.
+let API_URL = "";
+
+const STORAGE_KEY = "tamagrow_api_url";
+let PEOPLE = ["Yvan","Neal","Troy"];
+let latestData = null;
+let editing = false;
+
+function getApiUrl(){
+  return API_URL || localStorage.getItem(STORAGE_KEY) || "";
+}
+function saveApiUrl(){
+  const val = document.getElementById('apiUrlInput').value.trim();
+  if(!val) return;
+  localStorage.setItem(STORAGE_KEY, val);
+  document.getElementById('apiSetup').classList.remove('show');
+  loadData();
+}
+
+function peso(n){
+  const v = Number(n)||0;
+  return (v<0? "-":"") + "₱" + Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+async function loadData(){
+  const url = getApiUrl();
+  if(!url){
+    document.getElementById('apiSetup').classList.add('show');
+    document.getElementById('tableWrap').innerHTML = '<p class="empty">Add your Apps Script URL above to load data.</p>';
+    return;
+  }
+  try{
+    const res = await fetch(url, {method:'GET'});
+    const data = await res.json();
+    latestData = data;
+    PEOPLE = data.people || PEOPLE;
+    renderSummary(data.summary);
+    renderTable(data.expenses);
+    populateSelects();
+  }catch(err){
+    document.getElementById('tableWrap').innerHTML = '<p class="empty">Couldn\'t load data. Check the API URL and that the deployment access is set to "Anyone".</p>';
+  }
+}
+
+function renderSummary(summary){
+  const el = document.getElementById('summaryCards');
+  el.innerHTML = (summary||[]).map(p => {
+    const positive = p.netBalance >= 0;
+    return `<div class="person-card">
+      <div class="name">${p.name}</div>
+      <div class="row"><span>Paid</span><span>${peso(p.totalPaid)}</span></div>
+      <div class="row"><span>Share</span><span>${peso(p.totalShare)}</span></div>
+      <div class="net ${positive?'positive':'negative'}">${peso(p.netBalance)}</div>
+      <span class="status-pill ${positive?'collect':'payup'}">${p.status}</span>
+    </div>`;
+  }).join('');
+}
+
+function renderTable(expenses){
+  const wrap = document.getElementById('tableWrap');
+  if(!expenses || !expenses.length){
+    wrap.innerHTML = '<p class="empty">No expenses logged yet.</p>';
+    return;
+  }
+  const rows = expenses.map(e => `
+    <tr>
+      <td>${e.date||''}</td>
+      <td>${e.description||''}</td>
+      <td class="amount">${peso(e.amount)}</td>
+      <td>${e.paidBy||''}</td>
+      <td>${e.splitMode||''}${e.splitMode==='Pay Person' && e.payTo ? ' → '+e.payTo : ''}</td>
+      <td>${e.method||''}</td>
+      <td class="row-actions">
+        <button class="secondary" onclick="editRow(${e.rowId})">Edit</button>
+        <button class="secondary" onclick="deleteRow(${e.rowId})">Delete</button>
+      </td>
+    </tr>`).join('');
+  wrap.innerHTML = `<table>
+    <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Paid by</th><th>Split</th><th>Method</th><th></th></tr></thead>
+    <tbody>${rows}</tbody>
+  </table>`;
+}
+
+function populateSelects(){
+  const paidBy = document.getElementById('fPaidBy');
+  const payTo = document.getElementById('fPayTo');
+  paidBy.innerHTML = PEOPLE.map(p=>`<option value="${p}">${p}</option>`).join('');
+  payTo.innerHTML = PEOPLE.map(p=>`<option value="${p}">${p}</option>`).join('');
+}
+
+function toggleSplitTarget(){
+  const mode = document.getElementById('fSplitMode').value;
+  document.getElementById('payToField').style.display = mode==='Pay Person' ? 'flex' : 'none';
+}
+
+function editRow(rowId){
+  const e = latestData.expenses.find(x=>x.rowId===rowId);
+  if(!e) return;
+  editing = true;
+  document.getElementById('rowId').value = e.rowId;
+  document.getElementById('fDate').value = e.date;
+  document.getElementById('fDescription').value = e.description;
+  document.getElementById('fAmount').value = e.amount;
+  document.getElementById('fPaidBy').value = e.paidBy;
+  document.getElementById('fSplitMode').value = e.splitMode;
+  document.getElementById('fPayTo').value = e.payTo || PEOPLE[0];
+  document.getElementById('fMethod').value = e.method || '';
+  toggleSplitTarget();
+  document.getElementById('formTitle').textContent = 'Edit expense';
+  document.getElementById('submitBtn').textContent = 'Save changes';
+  document.getElementById('cancelEditBtn').style.display = 'inline-block';
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+function resetForm(){
+  editing = false;
+  document.getElementById('expenseForm').reset();
+  document.getElementById('rowId').value = '';
+  document.getElementById('formTitle').textContent = 'Add an expense';
+  document.getElementById('submitBtn').textContent = 'Add expense';
+  document.getElementById('cancelEditBtn').style.display = 'none';
+  toggleSplitTarget();
+}
+
+async function callApi(payload){
+  const url = getApiUrl();
+  // Sent as text/plain on purpose to avoid a CORS preflight request,
+  // which Apps Script web apps can't respond to. The server still
+  // parses this as JSON (see doPost in Code.gs).
+  const res = await fetch(url, {
+    method:'POST',
+    headers:{'Content-Type':'text/plain;charset=utf-8'},
+    body: JSON.stringify(payload)
+  });
+  return res.json();
+}
+
+async function submitForm(evt){
+  evt.preventDefault();
+  const statusEl = document.getElementById('formStatus');
+  const payload = {
+    action: editing ? 'update' : 'add',
+    rowId: document.getElementById('rowId').value,
+    date: document.getElementById('fDate').value,
+    description: document.getElementById('fDescription').value,
+    amount: document.getElementById('fAmount').value,
+    paidBy: document.getElementById('fPaidBy').value,
+    splitMode: document.getElementById('fSplitMode').value,
+    payTo: document.getElementById('fPayTo').value,
+    method: document.getElementById('fMethod').value
+  };
+  statusEl.textContent = 'Saving…';
+  statusEl.className = 'status-msg';
+  try{
+    const result = await callApi(payload);
+    if(result.ok){
+      statusEl.textContent = 'Saved.';
+      statusEl.className = 'status-msg ok';
+      resetForm();
+      loadData();
+    } else {
+      statusEl.textContent = 'Error: ' + (result.error||'unknown');
+      statusEl.className = 'status-msg error';
+    }
+  }catch(err){
+    statusEl.textContent = 'Network error — check the API URL.';
+    statusEl.className = 'status-msg error';
+  }
+}
+
+async function deleteRow(rowId){
+  if(!confirm('Delete this expense?')) return;
+  const result = await callApi({action:'delete', rowId});
+  if(result.ok) loadData();
+  else alert('Error: ' + (result.error||'unknown'));
+}
+
+// init
+document.getElementById('fDate').valueAsDate = new Date();
+populateSelects();
+toggleSplitTarget();
+loadData();
+</script>
+</body>
+</html>
