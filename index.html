@@ -348,6 +348,320 @@ function TransactionsTable({ expenses, isAdmin, onEdit, onDelete, deletingId }){
               <td data-label="Method">{e.method || '—'}</td>
               {isAdmin && (
                 <td className="row-actions" data-label="">
+                  <button className="secondary small" onClick={()=>onEdit(e)}>Edit</butto
+  .auth-area{text-align:right; display:flex; flex-direction:column; align-items:flex-end; gap:.55em;}
+  .badge{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.03em; color:var(--moss); background:#E4EEE3; padding:.4em .8em; border-radius:99px; display:inline-flex; align-items:center; gap:.4em; border:1px solid #CFE1CC;}
+  .badge::before{content:''; width:6px; height:6px; border-radius:50%; background:var(--moss); box-shadow:0 0 0 3px rgba(60,89,67,.15);}
+
+  .summary{display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr)); gap:.85em; margin:1.8em 0 2em;}
+  .person-card{background:var(--card); border:1px solid var(--paper-line); border-radius:var(--radius); padding:1.15em 1.25em; box-shadow:var(--shadow-sm); transition:transform .18s ease, box-shadow .18s ease; animation:riseIn .45s ease backwards;}
+  .person-card:hover{transform:translateY(-2px); box-shadow:var(--shadow-md);}
+  .person-card .name{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; letter-spacing:-.005em;}
+  .person-card .row{display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--ink-soft); margin-top:.5em;}
+  .net-label{font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); margin-top:.75em;}
+  .person-card .net{font-family:'IBM Plex Mono',monospace; font-size:1.5rem; margin-top:.1em; font-weight:500;}
+  .net.positive{color:var(--moss);} .net.negative{color:var(--rust);}
+  .status-pill{display:inline-block; margin-top:.55em; font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; padding:.28em .65em; border-radius:99px;}
+  .status-pill.collect{background:#E4EEE3; color:var(--moss-dark);} .status-pill.payup{background:#F3E2DC; color:var(--rust-dark);}
+  .status-pill.even{background:#EAE7DA; color:var(--ink-soft);}
+
+  @keyframes riseIn{from{opacity:0; transform:translateY(8px);} to{opacity:1; transform:translateY(0);}}
+  @media (prefers-reduced-motion: reduce){ *{animation-duration:.001ms !important; transition-duration:.001ms !important;} }
+
+  .panel{background:var(--card); border:1px solid var(--paper-line); border-radius:var(--radius); padding:1.3em 1.3em 1.5em; margin-bottom:1.4em; box-shadow:var(--shadow-sm);}
+  @media (min-width:640px){ .panel{padding:1.6em 1.6em 1.8em;} }
+  .panel h2{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; margin:0 0 1em; display:flex; justify-content:space-between; align-items:center; gap:1em; flex-wrap:wrap;}
+  .locked-note{font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-faint); font-weight:400; letter-spacing:.02em;}
+
+  form.expense-form{display:grid; grid-template-columns:repeat(6,1fr); gap:.75em;}
+  @media (max-width:640px){ form.expense-form{grid-template-columns:1fr 1fr;} }
+  form.expense-form .field{display:flex; flex-direction:column; gap:.35em;}
+  form.expense-form label{font-size:.7rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace; letter-spacing:.03em;}
+  form.expense-form input, form.expense-form select{
+    font-family:'IBM Plex Sans',sans-serif; font-size:.92rem; padding:.6em .7em; border:1px solid var(--paper-line);
+    border-radius:var(--radius-sm); background:#fff; color:var(--ink); transition:border-color .15s ease, box-shadow .15s ease;
+  }
+  form.expense-form input:focus, form.expense-form select:focus{border-color:var(--soil); box-shadow:0 0 0 3px rgba(139,94,60,.12); outline:none;}
+  form.expense-form input:hover, form.expense-form select:hover{border-color:#C7BFA3;}
+  .field.desc{grid-column:span 2;} .field.actions{grid-column:span 6; display:flex; gap:.6em; margin-top:.3em; flex-wrap:wrap;}
+  @media (max-width:640px){ .field.desc{grid-column:span 2;} .field.actions{grid-column:span 2;} }
+
+  button{
+    font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.02em; padding:.65em 1.15em; border-radius:var(--radius-sm);
+    border:1px solid var(--moss); background:var(--moss); color:#fff; cursor:pointer; transition:background .15s ease, border-color .15s ease, transform .1s ease;
+  }
+  button:hover:not(:disabled){background:var(--moss-dark); border-color:var(--moss-dark);}
+  button:active:not(:disabled){transform:translateY(1px);}
+  button.secondary{background:transparent; color:var(--ink-soft); border-color:var(--paper-line);}
+  button.secondary:hover:not(:disabled){background:#EFEBDD; color:var(--ink); border-color:#C7BFA3;}
+  button.danger{background:transparent; color:var(--rust); border-color:#E4C9BF;}
+  button.danger:hover:not(:disabled){background:#F3E2DC; border-color:var(--rust);}
+  button.small{padding:.35em .7em; font-size:.72rem;}
+  button:disabled{opacity:.5; cursor:default;}
+
+  .table-scroll{overflow-x:auto; -webkit-overflow-scrolling:touch;}
+  table{width:100%; border-collapse:collapse; font-size:.88rem;}
+  th{text-align:left; font-family:'IBM Plex Mono',monospace; font-size:.68rem; letter-spacing:.06em; text-transform:uppercase; color:var(--ink-faint); padding:.55em .5em; border-bottom:1px solid var(--paper-line); white-space:nowrap;}
+  td{padding:.65em .5em; border-bottom:1px solid var(--paper-line); vertical-align:top;}
+  td.amount{font-family:'IBM Plex Mono',monospace; text-align:right; white-space:nowrap;}
+  tbody tr{transition:background .1s ease;}
+  tbody tr:hover td{background:#F8F6EE;}
+  .row-actions{display:flex; gap:.4em; justify-content:flex-end;}
+  .split-tag{display:inline-block; font-family:'IBM Plex Mono',monospace; font-size:.72rem; color:var(--ink-soft); background:#EFEBDD; padding:.15em .5em; border-radius:99px;}
+
+  .empty{color:var(--ink-faint); font-style:italic; padding:1.6em 0; text-align:center; font-size:.9rem;}
+
+  /* --- Mobile card layout for the transactions table --- */
+  @media (max-width:680px){
+    table.responsive-table thead{display:none;}
+    table.responsive-table, table.responsive-table tbody, table.responsive-table tr, table.responsive-table td{display:block; width:100%;}
+    table.responsive-table tr{
+      border:1px solid var(--paper-line); border-radius:var(--radius-sm); margin-bottom:.7em; padding:.85em .9em;
+      background:#fff; box-shadow:var(--shadow-sm);
+    }
+    table.responsive-table td{border-bottom:none; padding:.28em 0; display:flex; justify-content:space-between; gap:1em; align-items:center;}
+    table.responsive-table td::before{
+      content:attr(data-label); font-family:'IBM Plex Mono',monospace; font-size:.66rem; letter-spacing:.05em;
+      text-transform:uppercase; color:var(--ink-faint); flex-shrink:0;
+    }
+    table.responsive-table td.amount{justify-content:space-between; text-align:right;}
+    table.responsive-table td.mobile-desc{flex-direction:column; align-items:flex-start; gap:.15em;}
+    table.responsive-table td.mobile-desc::before{font-size:.66rem;}
+    table.responsive-table td.mobile-desc .desc-text{font-family:'Fraunces',serif; font-size:1rem; font-weight:600; color:var(--ink);}
+    table.responsive-table .row-actions{justify-content:flex-end; width:100%;}
+    table.responsive-table tr:hover td{background:transparent;}
+  }
+
+  .status-msg{font-family:'IBM Plex Mono',monospace; font-size:.78rem; margin-top:.7em; min-height:1.2em;}
+  .status-msg.error{color:var(--rust);} .status-msg.ok{color:var(--moss);}
+
+  .skeleton{display:grid; gap:.6em;}
+  .skeleton .bar{height:2.4em; border-radius:var(--radius-sm); background:linear-gradient(90deg,#EFEBDD 25%,#F5F2E6 37%,#EFEBDD 63%); background-size:400% 100%; animation:shimmer 1.4s ease infinite;}
+  @keyframes shimmer{0%{background-position:100% 0;} 100%{background-position:0 0;}}
+
+  .modal-backdrop{position:fixed; inset:0; background:rgba(43,42,34,.5); display:flex; align-items:center; justify-content:center; z-index:50; padding:1em; animation:fadeIn .18s ease;}
+  .modal{background:var(--card); border-radius:var(--radius); padding:1.7em; width:340px; max-width:100%; box-shadow:var(--shadow-lg); animation:popIn .22s cubic-bezier(.2,.9,.3,1.2);}
+  .modal h3{font-family:'Fraunces',serif; margin:0 0 .3em; font-size:1.25rem;}
+  .modal p.hint{color:var(--ink-soft); font-size:.82rem; margin:0 0 1em;}
+  .modal input{width:100%; padding:.7em .75em; border:1px solid var(--paper-line); border-radius:var(--radius-sm); font-family:'IBM Plex Sans',sans-serif; margin-bottom:.9em; font-size:.95rem;}
+  .modal input:focus{border-color:var(--soil); box-shadow:0 0 0 3px rgba(139,94,60,.12); outline:none;}
+  .modal .modal-actions{display:flex; gap:.6em; justify-content:flex-end;}
+  @keyframes fadeIn{from{opacity:0;} to{opacity:1;}}
+  @keyframes popIn{from{opacity:0; transform:scale(.94) translateY(6px);} to{opacity:1; transform:scale(1) translateY(0);}}
+
+  .setup-wrap{max-width:480px; margin:4em auto; padding:0 1.2em;}
+  .setup-panel input{width:100%; padding:.7em .8em; border:1px solid var(--paper-line); border-radius:var(--radius-sm); font-family:'IBM Plex Mono',monospace; font-size:.85rem;}
+  .setup-row{display:flex; gap:.6em; flex-wrap:wrap;}
+  .setup-row input{flex:1; min-width:200px;}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+
+<!--
+  type="text/plain" keeps the browser from trying to run this raw JSX
+  directly. The bootstrap script at the bottom compiles it with Babel
+  using the CLASSIC runtime (plain React.createElement calls, no
+  `import` statements) and then runs the result. This avoids a known
+  Babel-standalone bug where its newer default ("automatic" runtime)
+  emits an ES import inside a non-module script and the browser
+  rejects it with "Cannot use import statement outside a module".
+-->
+<script type="text/plain" id="app-source">
+const { useState, useEffect, useCallback } = React;
+
+// ---- Configuration --------------------------------------------------
+// Paste your Apps Script /exec URL here so the page works with no setup
+// screen at all, OR leave blank and it'll ask once and remember it.
+const HARD_CODED_API_URL = "";
+const STORAGE_KEY = "tamagrow_api_url";
+const AUTH_KEY = "tamagrow_admin_pw"; // sessionStorage only — cleared when the tab closes
+
+function peso(n){
+  const v = Number(n) || 0;
+  return (v < 0 ? "-" : "") + "₱" + Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+async function callApi(apiUrl, payload){
+  const opts = payload
+    ? { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) }
+    : { method:'GET' };
+  const res = await fetch(apiUrl, opts);
+  return res.json();
+}
+
+function LoginModal({ onClose, onLogin }){
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  async function submit(e){
+    e.preventDefault();
+    setBusy(true); setError('');
+    try{
+      await onLogin(password);
+    }catch(err){
+      setError(err.message || 'Login failed');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <h3>Admin login</h3>
+        <p className="hint">Enter the shared admin password to add or edit expenses.</p>
+        <form onSubmit={submit}>
+          <input
+            type="password"
+            placeholder="Admin password"
+            autoFocus
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+          />
+          {error && <p className="status-msg error" style={{marginTop:'-.5em'}}>{error}</p>}
+          <div className="modal-actions">
+            <button type="button" className="secondary" onClick={onClose}>Cancel</button>
+            <button type="submit" disabled={busy || !password}>{busy ? 'Checking…' : 'Log in'}</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  );
+}
+
+function SummaryCards({ summary }){
+  if (!summary || !summary.length) return null;
+  return (
+    <section className="summary">
+      {summary.map((p, i) => {
+        const isEven = Math.abs(p.netBalance) < 0.005;
+        const positive = p.netBalance >= 0;
+        return (
+          <div className="person-card" key={p.name} style={{animationDelay: (i * 0.06) + 's'}}>
+            <div className="name">{p.name}</div>
+            <div className="row"><span>Paid</span><span>{peso(p.totalPaid)}</span></div>
+            <div className="row"><span>Share</span><span>{peso(p.totalShare)}</span></div>
+            <div className="net-label">Net balance</div>
+            <div className={"net " + (isEven ? "" : (positive ? "positive" : "negative"))}>{peso(p.netBalance)}</div>
+            <span className={"status-pill " + (isEven ? "even" : (positive ? "collect" : "payup"))}>
+              {isEven ? "Settled up" : (positive ? "Collect" : "Pay Up")}
+            </span>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
+
+const emptyForm = { rowId:'', date:'', description:'', amount:'', paidBy:'', splitMode:'Equally', payTo:'', method:'' };
+
+function ExpenseForm({ people, editingRow, onSave, onCancel, adminPassword }){
+  const [form, setForm] = useState(emptyForm);
+  const [status, setStatus] = useState({ text:'', kind:'' });
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (editingRow) {
+      setForm({ ...editingRow, rowId: editingRow.rowId, amount: editingRow.amount });
+    } else {
+      setForm({ ...emptyForm, date: new Date().toISOString().slice(0,10), paidBy: people[0], payTo: people[0] });
+    }
+    setStatus({ text:'', kind:'' });
+  }, [editingRow, people]);
+
+  function set(field, value){ setForm(f => ({ ...f, [field]: value })); }
+
+  async function submit(e){
+    e.preventDefault();
+    setBusy(true);
+    setStatus({ text:'Saving…', kind:'' });
+    try{
+      await onSave({ ...form, password: adminPassword });
+      setStatus({ text: editingRow ? 'Changes saved.' : 'Expense added.', kind:'ok' });
+      if (!editingRow) setForm({ ...emptyForm, date: new Date().toISOString().slice(0,10), paidBy: people[0], payTo: people[0] });
+    }catch(err){
+      setStatus({ text:'Error: ' + err.message, kind:'error' });
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form className="expense-form" onSubmit={submit}>
+      <div className="field">
+        <label>Date</label>
+        <input type="date" required value={form.date} onChange={e=>set('date', e.target.value)} />
+      </div>
+      <div className="field desc">
+        <label>Description</label>
+        <input type="text" required placeholder="e.g. Fertilizer, tools…" value={form.description} onChange={e=>set('description', e.target.value)} />
+      </div>
+      <div className="field">
+        <label>Amount</label>
+        <input type="number" step="0.01" min="0" required placeholder="0.00" value={form.amount} onChange={e=>set('amount', e.target.value)} />
+      </div>
+      <div className="field">
+        <label>Paid by</label>
+        <select value={form.paidBy} onChange={e=>set('paidBy', e.target.value)}>
+          {people.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
+      </div>
+      <div className="field">
+        <label>Split mode</label>
+        <select value={form.splitMode} onChange={e=>set('splitMode', e.target.value)}>
+          <option value="Equally">Equally</option>
+          <option value="Pay Person">Pay Person</option>
+        </select>
+      </div>
+      {form.splitMode === 'Pay Person' && (
+        <div className="field">
+          <label>Pay to</label>
+          <select value={form.payTo} onChange={e=>set('payTo', e.target.value)}>
+            {people.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+      )}
+      <div className="field">
+        <label>Method</label>
+        <input type="text" placeholder="Cash, GCash…" value={form.method} onChange={e=>set('method', e.target.value)} />
+      </div>
+      <div className="field actions">
+        <button type="submit" disabled={busy}>{editingRow ? 'Save changes' : 'Add expense'}</button>
+        {editingRow && <button type="button" className="secondary" onClick={onCancel}>Cancel edit</button>}
+      </div>
+      {status.text && <p className={"status-msg " + status.kind} style={{gridColumn:'span 6'}}>{status.text}</p>}
+    </form>
+  );
+}
+
+function TransactionsTable({ expenses, isAdmin, onEdit, onDelete, deletingId }){
+  if (!expenses || !expenses.length) return <p className="empty">No expenses logged yet — add the first one above.</p>;
+  return (
+    <div className="table-scroll">
+      <table className="responsive-table">
+        <thead>
+          <tr>
+            <th>Date</th><th>Description</th><th>Amount</th><th>Paid by</th><th>Split</th><th>Method</th>
+            {isAdmin && <th></th>}
+          </tr>
+        </thead>
+        <tbody>
+          {expenses.map(e => (
+            <tr key={e.rowId}>
+              <td data-label="Date">{e.date}</td>
+              <td data-label="Description" className="mobile-desc"><span className="desc-text">{e.description}</span></td>
+              <td data-label="Amount" className="amount">{peso(e.amount)}</td>
+              <td data-label="Paid by">{e.paidBy}</td>
+              <td data-label="Split"><span className="split-tag">{e.splitMode}{e.splitMode === 'Pay Person' && e.payTo ? ' → ' + e.payTo : ''}</span></td>
+              <td data-label="Method">{e.method || '—'}</td>
+              {isAdmin && (
+                <td className="row-actions" data-label="">
                   <button className="secondary small" onClick={()=>onEdit(e)}>Edit</butto  .status-pill{display:inline-block; margin-top:.5em; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; padding:.25em .6em; border-radius:99px;}
   .status-pill.collect{background:#E4EEE3; color:var(--moss);} .status-pill.payup{background:#F3E2DC; color:var(--rust);}
 
