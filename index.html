@@ -75,7 +75,16 @@
 <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
 <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-<script type="text/babel" data-presets="react">
+<!--
+  type="text/plain" keeps the browser from trying to run this raw JSX
+  directly. The bootstrap script at the bottom compiles it with Babel
+  using the CLASSIC runtime (plain React.createElement calls, no
+  `import` statements) and then runs the result. This avoids a known
+  Babel-standalone bug where its newer default ("automatic" runtime)
+  emits an ES import inside a non-module script and the browser
+  rejects it with "Cannot use import statement outside a module".
+-->
+<script type="text/plain" id="app-source">
 const { useState, useEffect, useCallback } = React;
 
 // ---- Configuration --------------------------------------------------
@@ -408,6 +417,17 @@ function App(){
 }
 
 ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+<script>
+  // Compile the JSX above with the classic runtime, then execute it.
+  var source = document.getElementById('app-source').textContent;
+  var compiled = Babel.transform(source, {
+    presets: [["react", { runtime: "classic" }]]
+  }).code;
+  var runnable = document.createElement('script');
+  runnable.textContent = compiled;
+  document.body.appendChild(runnable);
 </script>
 </body>
 </html>
