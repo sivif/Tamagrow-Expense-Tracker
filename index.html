@@ -8,377 +8,406 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root{
-    --paper:#F1EEE3;
-    --paper-line:#DAD4C0;
-    --ink:#2B2A22;
-    --ink-soft:#6B6A5D;
-    --soil:#8B5E3C;
-    --moss:#3C5943;
-    --moss-soft:#6B8F71;
-    --rust:#A64B36;
-    --card:#FBFAF5;
-    --radius:10px;
+    --paper:#F1EEE3; --paper-line:#DAD4C0; --ink:#2B2A22; --ink-soft:#6B6A5D;
+    --soil:#8B5E3C; --moss:#3C5943; --rust:#A64B36; --card:#FBFAF5; --radius:10px;
   }
   *{box-sizing:border-box;}
   body{
-    margin:0;
-    background:var(--paper);
-    background-image:
-      linear-gradient(var(--paper-line) 1px, transparent 1px);
-    background-size: 100% 2.1em;
-    color:var(--ink);
-    font-family:'IBM Plex Sans', sans-serif;
-    -webkit-font-smoothing:antialiased;
+    margin:0; background:var(--paper);
+    background-image:linear-gradient(var(--paper-line) 1px, transparent 1px);
+    background-size:100% 2.1em;
+    color:var(--ink); font-family:'IBM Plex Sans', sans-serif; -webkit-font-smoothing:antialiased;
   }
   .wrap{max-width:920px;margin:0 auto;padding:2.5em 1.5em 5em;}
-
-  header.hero{margin-bottom:1.8em;}
-  .eyebrow{
-    font-family:'IBM Plex Mono',monospace;
-    font-size:.72rem;letter-spacing:.14em;text-transform:uppercase;
-    color:var(--soil); margin:0 0 .4em;
-  }
-  h1{
-    font-family:'Fraunces',serif; font-weight:600;
-    font-size:clamp(1.8rem,4vw,2.6rem);
-    margin:0 0 .2em; letter-spacing:-.01em;
-  }
+  header.hero{display:flex; justify-content:space-between; align-items:flex-start; gap:1em; margin-bottom:1.8em;}
+  .eyebrow{font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.14em; text-transform:uppercase; color:var(--soil); margin:0 0 .4em;}
+  h1{font-family:'Fraunces',serif; font-weight:600; font-size:clamp(1.8rem,4vw,2.6rem); margin:0 0 .2em; letter-spacing:-.01em;}
   .sub{color:var(--ink-soft); font-size:.95rem; margin:0;}
 
-  .summary{
-    display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr));
-    gap:.9em; margin:1.8em 0 2.2em;
-  }
-  .person-card{
-    background:var(--card); border:1px solid var(--paper-line);
-    border-radius:var(--radius); padding:1.1em 1.2em;
-    position:relative; overflow:hidden;
-  }
-  .person-card .name{
-    font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem;
-  }
-  .person-card .row{
-    display:flex; justify-content:space-between; align-items:baseline;
-    font-family:'IBM Plex Mono',monospace; font-size:.82rem; color:var(--ink-soft);
-    margin-top:.5em;
-  }
-  .person-card .net{
-    font-family:'IBM Plex Mono',monospace; font-size:1.3rem; margin-top:.35em;
-  }
-  .net.positive{color:var(--moss);}
-  .net.negative{color:var(--rust);}
-  .status-pill{
-    display:inline-block; margin-top:.5em; font-family:'IBM Plex Mono',monospace;
-    font-size:.72rem; letter-spacing:.05em; text-transform:uppercase;
-    padding:.25em .6em; border-radius:99px;
-  }
-  .status-pill.collect{background:#E4EEE3; color:var(--moss);}
-  .status-pill.payup{background:#F3E2DC; color:var(--rust);}
+  .auth-area{text-align:right;}
+  .badge{font-family:'IBM Plex Mono',monospace; font-size:.75rem; color:var(--moss); background:#E4EEE3; padding:.35em .7em; border-radius:99px; display:inline-block;}
 
-  .panel{
-    background:var(--card); border:1px solid var(--paper-line);
-    border-radius:var(--radius); padding:1.4em 1.4em 1.6em; margin-bottom:1.6em;
-  }
-  .panel h2{
-    font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; margin:0 0 1em;
-  }
+  .summary{display:grid; grid-template-columns:repeat(auto-fit,minmax(210px,1fr)); gap:.9em; margin:1.8em 0 2.2em;}
+  .person-card{background:var(--card); border:1px solid var(--paper-line); border-radius:var(--radius); padding:1.1em 1.2em;}
+  .person-card .name{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem;}
+  .person-card .row{display:flex; justify-content:space-between; align-items:baseline; font-family:'IBM Plex Mono',monospace; font-size:.82rem; color:var(--ink-soft); margin-top:.5em;}
+  .net-label{font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); margin-top:.7em;}
+  .person-card .net{font-family:'IBM Plex Mono',monospace; font-size:1.4rem; margin-top:.15em;}
+  .net.positive{color:var(--moss);} .net.negative{color:var(--rust);}
+  .status-pill{display:inline-block; margin-top:.5em; font-family:'IBM Plex Mono',monospace; font-size:.72rem; letter-spacing:.05em; text-transform:uppercase; padding:.25em .6em; border-radius:99px;}
+  .status-pill.collect{background:#E4EEE3; color:var(--moss);} .status-pill.payup{background:#F3E2DC; color:var(--rust);}
+
+  .panel{background:var(--card); border:1px solid var(--paper-line); border-radius:var(--radius); padding:1.4em 1.4em 1.6em; margin-bottom:1.6em;}
+  .panel h2{font-family:'Fraunces',serif; font-weight:600; font-size:1.15rem; margin:0 0 1em; display:flex; justify-content:space-between; align-items:center;}
+  .locked-note{font-family:'IBM Plex Mono',monospace; font-size:.8rem; color:var(--ink-soft); font-weight:400;}
+
   form.expense-form{display:grid; grid-template-columns:repeat(6,1fr); gap:.7em;}
   form.expense-form .field{display:flex; flex-direction:column; gap:.3em;}
   form.expense-form label{font-size:.72rem; color:var(--ink-soft); font-family:'IBM Plex Mono',monospace;}
-  form.expense-form input, form.expense-form select{
-    font-family:'IBM Plex Sans',sans-serif; font-size:.9rem;
-    padding:.5em .6em; border:1px solid var(--paper-line); border-radius:6px;
-    background:#fff; color:var(--ink);
-  }
-  .field.desc{grid-column:span 2;}
-  .field.date, .field.amount{grid-column:span 1;}
-  .field.actions{grid-column:span 6; display:flex; gap:.6em; margin-top:.2em;}
-  button{
-    font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.02em;
-    padding:.6em 1.1em; border-radius:6px; border:1px solid var(--moss);
-    background:var(--moss); color:#fff; cursor:pointer;
-  }
+  form.expense-form input, form.expense-form select{font-family:'IBM Plex Sans',sans-serif; font-size:.9rem; padding:.5em .6em; border:1px solid var(--paper-line); border-radius:6px; background:#fff; color:var(--ink);}
+  .field.desc{grid-column:span 2;} .field.actions{grid-column:span 6; display:flex; gap:.6em; margin-top:.2em;}
+  button{font-family:'IBM Plex Mono',monospace; font-size:.82rem; letter-spacing:.02em; padding:.6em 1.1em; border-radius:6px; border:1px solid var(--moss); background:var(--moss); color:#fff; cursor:pointer;}
   button.secondary{background:transparent; color:var(--ink-soft); border-color:var(--paper-line);}
+  button.small{padding:.3em .6em; font-size:.72rem;}
   button:disabled{opacity:.5; cursor:default;}
 
   table{width:100%; border-collapse:collapse; font-size:.88rem;}
-  th{
-    text-align:left; font-family:'IBM Plex Mono',monospace; font-size:.7rem;
-    letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft);
-    padding:.5em .5em; border-bottom:1px solid var(--paper-line);
-  }
+  th{text-align:left; font-family:'IBM Plex Mono',monospace; font-size:.7rem; letter-spacing:.05em; text-transform:uppercase; color:var(--ink-soft); padding:.5em .5em; border-bottom:1px solid var(--paper-line);}
   td{padding:.6em .5em; border-bottom:1px solid var(--paper-line); vertical-align:top;}
   td.amount{font-family:'IBM Plex Mono',monospace; text-align:right;}
   tr:hover td{background:#F8F6EE;}
   .row-actions{display:flex; gap:.4em;}
-  .row-actions button{padding:.3em .6em; font-size:.72rem;}
   .empty{color:var(--ink-soft); font-style:italic; padding:1.4em 0;}
   .status-msg{font-family:'IBM Plex Mono',monospace; font-size:.8rem; margin-top:.8em; min-height:1.2em;}
-  .status-msg.error{color:var(--rust);}
-  .status-msg.ok{color:var(--moss);}
+  .status-msg.error{color:var(--rust);} .status-msg.ok{color:var(--moss);}
 
-  #apiSetup{display:none;}
-  #apiSetup.show{display:block;}
+  .modal-backdrop{position:fixed; inset:0; background:rgba(43,42,34,.45); display:flex; align-items:center; justify-content:center; z-index:50;}
+  .modal{background:var(--card); border-radius:var(--radius); padding:1.6em; width:320px; max-width:90vw;}
+  .modal h3{font-family:'Fraunces',serif; margin:0 0 .8em;}
+  .modal input{width:100%; padding:.6em; border:1px solid var(--paper-line); border-radius:6px; font-family:'IBM Plex Sans',sans-serif; margin-bottom:.8em;}
+  .modal .modal-actions{display:flex; gap:.6em; justify-content:flex-end;}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div id="root"></div>
 
-  <header class="hero">
-    <p class="eyebrow">TamaGrow · shared budget</p>
-    <h1>Expense Ledger</h1>
-    <p class="sub">Live view of the Google Sheet, editable from here.</p>
-  </header>
+<script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+<script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
-  <div id="apiSetup" class="panel">
-    <h2>One-time setup</h2>
-    <p style="font-size:.88rem;color:var(--ink-soft);margin-top:0;">
-      Paste your Apps Script Web App URL (ends in <code>/exec</code>) below.
-      It's saved in this browser only.
-    </p>
-    <div style="display:flex; gap:.6em;">
-      <input id="apiUrlInput" type="text" placeholder="https://script.google.com/macros/s/.../exec" style="flex:1;padding:.6em;border:1px solid var(--paper-line);border-radius:6px;">
-      <button onclick="saveApiUrl()">Save</button>
+<script type="text/babel" data-presets="react">
+const { useState, useEffect, useCallback } = React;
+
+// ---- Configuration --------------------------------------------------
+// Paste your Apps Script /exec URL here so the page works with no setup
+// screen at all, OR leave blank and it'll ask once and remember it.
+const HARD_CODED_API_URL = "";
+const STORAGE_KEY = "tamagrow_api_url";
+const AUTH_KEY = "tamagrow_admin_pw"; // sessionStorage only — cleared when the tab closes
+
+function peso(n){
+  const v = Number(n) || 0;
+  return (v < 0 ? "-" : "") + "₱" + Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+}
+
+async function callApi(apiUrl, payload){
+  const opts = payload
+    ? { method:'POST', headers:{'Content-Type':'text/plain;charset=utf-8'}, body: JSON.stringify(payload) }
+    : { method:'GET' };
+  const res = await fetch(apiUrl, opts);
+  return res.json();
+}
+
+function LoginModal({ onClose, onLogin }){
+  const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
+  const [busy, setBusy] = useState(false);
+
+  async function submit(e){
+    e.preventDefault();
+    setBusy(true); setError('');
+    try{
+      await onLogin(password);
+    }catch(err){
+      setError(err.message || 'Login failed');
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  return (
+    <div className="modal-backdrop" onClick={onClose}>
+      <div className="modal" onClick={e=>e.stopPropagation()}>
+        <h3>Admin login</h3>
+        <form onSubmit={submit}>
+          <input
+            type="password"
+            placeholder="Admin password"
+            autoFocus
+            value={password}
+            onChange={e=>setPassword(e.target.value)}
+          />
+          {error && <p className="status-msg error">{error}</p>}
+          <div className="modal-actions">
+            <button type="button" className="secondary" onClick={onClose}>Cancel</button>
+            <button type="submit" disabled={busy}>{busy ? 'Checking…' : 'Log in'}</button>
+          </div>
+        </form>
+      </div>
     </div>
-  </div>
+  );
+}
 
-  <section class="summary" id="summaryCards"></section>
+function SummaryCards({ summary }){
+  if (!summary || !summary.length) return null;
+  return (
+    <section className="summary">
+      {summary.map(p => {
+        const positive = p.netBalance >= 0;
+        return (
+          <div className="person-card" key={p.name}>
+            <div className="name">{p.name}</div>
+            <div className="row"><span>Paid</span><span>{peso(p.totalPaid)}</span></div>
+            <div className="row"><span>Share</span><span>{peso(p.totalShare)}</span></div>
+            <div className="net-label">Net balance</div>
+            <div className={"net " + (positive ? "positive" : "negative")}>{peso(p.netBalance)}</div>
+            <span className={"status-pill " + (positive ? "collect" : "payup")}>
+              {positive ? "Collect" : "Pay Up"}
+            </span>
+          </div>
+        );
+      })}
+    </section>
+  );
+}
 
-  <section class="panel">
-    <h2 id="formTitle">Add an expense</h2>
-    <form class="expense-form" id="expenseForm" onsubmit="submitForm(event)">
-      <input type="hidden" id="rowId">
-      <div class="field date">
+const emptyForm = { rowId:'', date:'', description:'', amount:'', paidBy:'', splitMode:'Equally', payTo:'', method:'' };
+
+function ExpenseForm({ people, editingRow, onSave, onCancel, adminPassword }){
+  const [form, setForm] = useState(emptyForm);
+  const [status, setStatus] = useState({ text:'', kind:'' });
+  const [busy, setBusy] = useState(false);
+
+  useEffect(() => {
+    if (editingRow) {
+      setForm({ ...editingRow, rowId: editingRow.rowId, amount: editingRow.amount });
+    } else {
+      setForm({ ...emptyForm, date: new Date().toISOString().slice(0,10), paidBy: people[0], payTo: people[0] });
+    }
+  }, [editingRow, people]);
+
+  function set(field, value){ setForm(f => ({ ...f, [field]: value })); }
+
+  async function submit(e){
+    e.preventDefault();
+    setBusy(true);
+    setStatus({ text:'Saving…', kind:'' });
+    try{
+      await onSave({ ...form, password: adminPassword });
+      setStatus({ text:'Saved.', kind:'ok' });
+      if (!editingRow) setForm({ ...emptyForm, date: new Date().toISOString().slice(0,10), paidBy: people[0], payTo: people[0] });
+    }catch(err){
+      setStatus({ text:'Error: ' + err.message, kind:'error' });
+    }finally{
+      setBusy(false);
+    }
+  }
+
+  return (
+    <form className="expense-form" onSubmit={submit}>
+      <div className="field">
         <label>Date</label>
-        <input type="date" id="fDate" required>
+        <input type="date" required value={form.date} onChange={e=>set('date', e.target.value)} />
       </div>
-      <div class="field desc">
+      <div className="field desc">
         <label>Description</label>
-        <input type="text" id="fDescription" required>
+        <input type="text" required value={form.description} onChange={e=>set('description', e.target.value)} />
       </div>
-      <div class="field amount">
+      <div className="field">
         <label>Amount</label>
-        <input type="number" step="0.01" id="fAmount" required>
+        <input type="number" step="0.01" required value={form.amount} onChange={e=>set('amount', e.target.value)} />
       </div>
-      <div class="field">
+      <div className="field">
         <label>Paid by</label>
-        <select id="fPaidBy" required></select>
+        <select value={form.paidBy} onChange={e=>set('paidBy', e.target.value)}>
+          {people.map(p => <option key={p} value={p}>{p}</option>)}
+        </select>
       </div>
-      <div class="field">
+      <div className="field">
         <label>Split mode</label>
-        <select id="fSplitMode" onchange="toggleSplitTarget()">
+        <select value={form.splitMode} onChange={e=>set('splitMode', e.target.value)}>
           <option value="Equally">Equally</option>
           <option value="Pay Person">Pay Person</option>
         </select>
       </div>
-      <div class="field" id="payToField" style="display:none;">
-        <label>Pay to</label>
-        <select id="fPayTo"></select>
-      </div>
-      <div class="field">
+      {form.splitMode === 'Pay Person' && (
+        <div className="field">
+          <label>Pay to</label>
+          <select value={form.payTo} onChange={e=>set('payTo', e.target.value)}>
+            {people.map(p => <option key={p} value={p}>{p}</option>)}
+          </select>
+        </div>
+      )}
+      <div className="field">
         <label>Method</label>
-        <input type="text" id="fMethod" placeholder="Cash, GCash…">
+        <input type="text" placeholder="Cash, GCash…" value={form.method} onChange={e=>set('method', e.target.value)} />
       </div>
-      <div class="field actions">
-        <button type="submit" id="submitBtn">Add expense</button>
-        <button type="button" class="secondary" id="cancelEditBtn" onclick="resetForm()" style="display:none;">Cancel edit</button>
+      <div className="field actions">
+        <button type="submit" disabled={busy}>{editingRow ? 'Save changes' : 'Add expense'}</button>
+        {editingRow && <button type="button" className="secondary" onClick={onCancel}>Cancel edit</button>}
       </div>
+      {status.text && <p className={"status-msg " + status.kind} style={{gridColumn:'span 6'}}>{status.text}</p>}
     </form>
-    <p class="status-msg" id="formStatus"></p>
-  </section>
-
-  <section class="panel">
-    <h2>Transactions</h2>
-    <div id="tableWrap"><p class="empty">Loading…</p></div>
-  </section>
-
-</div>
-
-<script>
-// ---- Configuration -------------------------------------------------
-// Paste your Apps Script /exec URL here, OR leave blank and the page
-// will ask for it once and remember it in localStorage.
-let API_URL = "";
-
-const STORAGE_KEY = "tamagrow_api_url";
-let PEOPLE = ["Yvan","Neal","Troy"];
-let latestData = null;
-let editing = false;
-
-function getApiUrl(){
-  return API_URL || localStorage.getItem(STORAGE_KEY) || "";
-}
-function saveApiUrl(){
-  const val = document.getElementById('apiUrlInput').value.trim();
-  if(!val) return;
-  localStorage.setItem(STORAGE_KEY, val);
-  document.getElementById('apiSetup').classList.remove('show');
-  loadData();
+  );
 }
 
-function peso(n){
-  const v = Number(n)||0;
-  return (v<0? "-":"") + "₱" + Math.abs(v).toLocaleString(undefined,{minimumFractionDigits:2,maximumFractionDigits:2});
+function TransactionsTable({ expenses, isAdmin, onEdit, onDelete }){
+  if (!expenses || !expenses.length) return <p className="empty">No expenses logged yet.</p>;
+  return (
+    <table>
+      <thead>
+        <tr>
+          <th>Date</th><th>Description</th><th>Amount</th><th>Paid by</th><th>Split</th><th>Method</th>
+          {isAdmin && <th></th>}
+        </tr>
+      </thead>
+      <tbody>
+        {expenses.map(e => (
+          <tr key={e.rowId}>
+            <td>{e.date}</td>
+            <td>{e.description}</td>
+            <td className="amount">{peso(e.amount)}</td>
+            <td>{e.paidBy}</td>
+            <td>{e.splitMode}{e.splitMode === 'Pay Person' && e.payTo ? ' → ' + e.payTo : ''}</td>
+            <td>{e.method}</td>
+            {isAdmin && (
+              <td className="row-actions">
+                <button className="secondary small" onClick={()=>onEdit(e)}>Edit</button>
+                <button className="secondary small" onClick={()=>onDelete(e.rowId)}>Delete</button>
+              </td>
+            )}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 }
 
-async function loadData(){
-  const url = getApiUrl();
-  if(!url){
-    document.getElementById('apiSetup').classList.add('show');
-    document.getElementById('tableWrap').innerHTML = '<p class="empty">Add your Apps Script URL above to load data.</p>';
-    return;
-  }
-  try{
-    const res = await fetch(url, {method:'GET'});
-    const data = await res.json();
-    latestData = data;
-    PEOPLE = data.people || PEOPLE;
-    renderSummary(data.summary);
-    renderTable(data.expenses);
-    populateSelects();
-  }catch(err){
-    document.getElementById('tableWrap').innerHTML = '<p class="empty">Couldn\'t load data. Check the API URL and that the deployment access is set to "Anyone".</p>';
-  }
-}
+function App(){
+  const [apiUrl, setApiUrl] = useState(HARD_CODED_API_URL || localStorage.getItem(STORAGE_KEY) || '');
+  const [apiUrlInput, setApiUrlInput] = useState('');
+  const [data, setData] = useState(null);
+  const [loadError, setLoadError] = useState('');
+  const [showLogin, setShowLogin] = useState(false);
+  const [adminPassword, setAdminPassword] = useState(sessionStorage.getItem(AUTH_KEY) || '');
+  const [editingRow, setEditingRow] = useState(null);
 
-function renderSummary(summary){
-  const el = document.getElementById('summaryCards');
-  el.innerHTML = (summary||[]).map(p => {
-    const positive = p.netBalance >= 0;
-    return `<div class="person-card">
-      <div class="name">${p.name}</div>
-      <div class="row"><span>Paid</span><span>${peso(p.totalPaid)}</span></div>
-      <div class="row"><span>Share</span><span>${peso(p.totalShare)}</span></div>
-      <div class="net ${positive?'positive':'negative'}">${peso(p.netBalance)}</div>
-      <span class="status-pill ${positive?'collect':'payup'}">${p.status}</span>
-    </div>`;
-  }).join('');
-}
+  const isAdmin = !!adminPassword;
 
-function renderTable(expenses){
-  const wrap = document.getElementById('tableWrap');
-  if(!expenses || !expenses.length){
-    wrap.innerHTML = '<p class="empty">No expenses logged yet.</p>';
-    return;
-  }
-  const rows = expenses.map(e => `
-    <tr>
-      <td>${e.date||''}</td>
-      <td>${e.description||''}</td>
-      <td class="amount">${peso(e.amount)}</td>
-      <td>${e.paidBy||''}</td>
-      <td>${e.splitMode||''}${e.splitMode==='Pay Person' && e.payTo ? ' → '+e.payTo : ''}</td>
-      <td>${e.method||''}</td>
-      <td class="row-actions">
-        <button class="secondary" onclick="editRow(${e.rowId})">Edit</button>
-        <button class="secondary" onclick="deleteRow(${e.rowId})">Delete</button>
-      </td>
-    </tr>`).join('');
-  wrap.innerHTML = `<table>
-    <thead><tr><th>Date</th><th>Description</th><th>Amount</th><th>Paid by</th><th>Split</th><th>Method</th><th></th></tr></thead>
-    <tbody>${rows}</tbody>
-  </table>`;
-}
-
-function populateSelects(){
-  const paidBy = document.getElementById('fPaidBy');
-  const payTo = document.getElementById('fPayTo');
-  paidBy.innerHTML = PEOPLE.map(p=>`<option value="${p}">${p}</option>`).join('');
-  payTo.innerHTML = PEOPLE.map(p=>`<option value="${p}">${p}</option>`).join('');
-}
-
-function toggleSplitTarget(){
-  const mode = document.getElementById('fSplitMode').value;
-  document.getElementById('payToField').style.display = mode==='Pay Person' ? 'flex' : 'none';
-}
-
-function editRow(rowId){
-  const e = latestData.expenses.find(x=>x.rowId===rowId);
-  if(!e) return;
-  editing = true;
-  document.getElementById('rowId').value = e.rowId;
-  document.getElementById('fDate').value = e.date;
-  document.getElementById('fDescription').value = e.description;
-  document.getElementById('fAmount').value = e.amount;
-  document.getElementById('fPaidBy').value = e.paidBy;
-  document.getElementById('fSplitMode').value = e.splitMode;
-  document.getElementById('fPayTo').value = e.payTo || PEOPLE[0];
-  document.getElementById('fMethod').value = e.method || '';
-  toggleSplitTarget();
-  document.getElementById('formTitle').textContent = 'Edit expense';
-  document.getElementById('submitBtn').textContent = 'Save changes';
-  document.getElementById('cancelEditBtn').style.display = 'inline-block';
-  window.scrollTo({top:0, behavior:'smooth'});
-}
-
-function resetForm(){
-  editing = false;
-  document.getElementById('expenseForm').reset();
-  document.getElementById('rowId').value = '';
-  document.getElementById('formTitle').textContent = 'Add an expense';
-  document.getElementById('submitBtn').textContent = 'Add expense';
-  document.getElementById('cancelEditBtn').style.display = 'none';
-  toggleSplitTarget();
-}
-
-async function callApi(payload){
-  const url = getApiUrl();
-  // Sent as text/plain on purpose to avoid a CORS preflight request,
-  // which Apps Script web apps can't respond to. The server still
-  // parses this as JSON (see doPost in Code.gs).
-  const res = await fetch(url, {
-    method:'POST',
-    headers:{'Content-Type':'text/plain;charset=utf-8'},
-    body: JSON.stringify(payload)
-  });
-  return res.json();
-}
-
-async function submitForm(evt){
-  evt.preventDefault();
-  const statusEl = document.getElementById('formStatus');
-  const payload = {
-    action: editing ? 'update' : 'add',
-    rowId: document.getElementById('rowId').value,
-    date: document.getElementById('fDate').value,
-    description: document.getElementById('fDescription').value,
-    amount: document.getElementById('fAmount').value,
-    paidBy: document.getElementById('fPaidBy').value,
-    splitMode: document.getElementById('fSplitMode').value,
-    payTo: document.getElementById('fPayTo').value,
-    method: document.getElementById('fMethod').value
-  };
-  statusEl.textContent = 'Saving…';
-  statusEl.className = 'status-msg';
-  try{
-    const result = await callApi(payload);
-    if(result.ok){
-      statusEl.textContent = 'Saved.';
-      statusEl.className = 'status-msg ok';
-      resetForm();
-      loadData();
-    } else {
-      statusEl.textContent = 'Error: ' + (result.error||'unknown');
-      statusEl.className = 'status-msg error';
+  const load = useCallback(async () => {
+    if (!apiUrl) return;
+    try{
+      const result = await callApi(apiUrl, null);
+      setData(result);
+      setLoadError('');
+    }catch(err){
+      setLoadError("Couldn't load data. Check the API URL and that the deployment access is set to \"Anyone\".");
     }
-  }catch(err){
-    statusEl.textContent = 'Network error — check the API URL.';
-    statusEl.className = 'status-msg error';
+  }, [apiUrl]);
+
+  useEffect(() => { load(); }, [load]);
+
+  function saveApiUrl(){
+    if (!apiUrlInput.trim()) return;
+    localStorage.setItem(STORAGE_KEY, apiUrlInput.trim());
+    setApiUrl(apiUrlInput.trim());
   }
+
+  async function handleLogin(password){
+    const result = await callApi(apiUrl, { action:'login', password });
+    if (!result.ok) throw new Error(result.error || 'Wrong password');
+    sessionStorage.setItem(AUTH_KEY, password);
+    setAdminPassword(password);
+    setShowLogin(false);
+  }
+
+  function logout(){
+    sessionStorage.removeItem(AUTH_KEY);
+    setAdminPassword('');
+    setEditingRow(null);
+  }
+
+  async function handleSave(payload){
+    const action = payload.rowId ? 'update' : 'add';
+    const result = await callApi(apiUrl, { ...payload, action });
+    if (!result.ok) throw new Error(result.error || 'Save failed');
+    setEditingRow(null);
+    load();
+  }
+
+  async function handleDelete(rowId){
+    if (!confirm('Delete this expense?')) return;
+    const result = await callApi(apiUrl, { action:'delete', rowId, password: adminPassword });
+    if (!result.ok) { alert('Error: ' + result.error); return; }
+    load();
+  }
+
+  if (!apiUrl) {
+    return (
+      <div className="wrap">
+        <div className="panel">
+          <h2>One-time setup</h2>
+          <p style={{fontSize:'.88rem', color:'var(--ink-soft)', marginTop:0}}>
+            Paste your Apps Script Web App URL (ends in <code>/exec</code>). It's saved in this browser only.
+          </p>
+          <div style={{display:'flex', gap:'.6em'}}>
+            <input
+              type="text"
+              placeholder="https://script.google.com/macros/s/.../exec"
+              style={{flex:1, padding:'.6em', border:'1px solid var(--paper-line)', borderRadius:'6px'}}
+              value={apiUrlInput}
+              onChange={e=>setApiUrlInput(e.target.value)}
+            />
+            <button onClick={saveApiUrl}>Save</button>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const people = (data && data.people) || ['Yvan','Neal','Troy'];
+
+  return (
+    <div className="wrap">
+      <header className="hero">
+        <div>
+          <p className="eyebrow">TamaGrow · shared budget</p>
+          <h1>Expense Ledger</h1>
+          <p className="sub">Live view of the Google Sheet, editable from here.</p>
+        </div>
+        <div className="auth-area">
+          {isAdmin
+            ? <><span className="badge">Admin</span><br/><button className="secondary small" style={{marginTop:'.5em'}} onClick={logout}>Log out</button></>
+            : <button className="secondary small" onClick={()=>setShowLogin(true)}>Admin login</button>}
+        </div>
+      </header>
+
+      {loadError && <p className="status-msg error">{loadError}</p>}
+
+      <SummaryCards summary={data && data.summary} />
+
+      {isAdmin && (
+        <section className="panel">
+          <h2>{editingRow ? 'Edit expense' : 'Add an expense'}</h2>
+          <ExpenseForm
+            people={people}
+            editingRow={editingRow}
+            onSave={handleSave}
+            onCancel={()=>setEditingRow(null)}
+            adminPassword={adminPassword}
+          />
+        </section>
+      )}
+
+      <section className="panel">
+        <h2>
+          Transactions
+          {!isAdmin && <span className="locked-note">Log in as admin to edit</span>}
+        </h2>
+        <TransactionsTable
+          expenses={data && data.expenses}
+          isAdmin={isAdmin}
+          onEdit={setEditingRow}
+          onDelete={handleDelete}
+        />
+      </section>
+
+      {showLogin && <LoginModal onClose={()=>setShowLogin(false)} onLogin={handleLogin} />}
+    </div>
+  );
 }
 
-async function deleteRow(rowId){
-  if(!confirm('Delete this expense?')) return;
-  const result = await callApi({action:'delete', rowId});
-  if(result.ok) loadData();
-  else alert('Error: ' + (result.error||'unknown'));
-}
-
-// init
-document.getElementById('fDate').valueAsDate = new Date();
-populateSelects();
-toggleSplitTarget();
-loadData();
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
 </script>
 </body>
 </html>
